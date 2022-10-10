@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <pre></pre>
+
+    <script>
+      async function init() {
+        // On va chercher les countries
+        const response = await fetch("./all-week-countries.json");
+        const countries = await response.json();
+
+        // Cherchons l'autre jeu de données
+        const response2 = await fetch("./all-week-globals.json");
+        const weeks = await response2.json();
+
+        const france = countries
+          .filter((c) => c.country_name === "France")
+          .map((c) => {
+            delete c.country_iso2;
+            delete c.cumulative_weeks_in_top_10;
+            return c;
+          })
+          .map((c) => {
+            const views = weeks.filter(
+              (w) => w.show_title === c.show_title && w.week === c.week
+            );
+            c.views = views;
+            return c;
+          })
+          .filter((c) => c.views.length > 0)
+          .map((c) => {
+            c.weekly_hours_viewed = c.views[0].weekly_hours_viewed;
+            delete c.views;
+            return c;
+          });
+
+        document.querySelector("pre").textContent = JSON.stringify(
+          france,
+          null,
+          2
+        );
+      }
+
+      init();
+    </script>
+  </body>
+</html>
