@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+}
+
+
+.bloc-contenu {
+
+    display: flex;
+    flex-direction: row;
+}
+.bloc-left {
+ width: 30%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.bloc-information {
+
+    width: 100%;
+    height: 30vh;
+    margin-left: 3rem;
+    color: white;
+
+}
+
+h1 {
+
+    font-size: 2.5rem;
+}
+
+img {
+
+    width: 8rem;
+    height: 8rem;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+ 
+
+   
+}
+
+
+.bloc-right {
+    
+     height: 100vh;
+     width: 80%;
+          
+   }
+
+
+   .filtre {
+
+ 
+    font-size: 1.3rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: CENTER;
+    align-items: center;
+    gap: 2.5rem;
+    width: 40%;
+    height: 30vh;
+    color: white;
+   }
+
+   .filtre_serie {
+   
+    
+    color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+   }
+
+   .filtre_tv {
+   
+    
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+   }
+
+   
+ /* .border {
+    /* background-color: red;
+    width: 100%;
+    height: 0.2rem;
+    border-radius: 25px;
+    
+   }
+
+   .hidden {
+    display: none;
+   
+    
+
+   } */
