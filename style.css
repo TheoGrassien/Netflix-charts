@@ -36,7 +36,7 @@ a {
 }
 
 a:hover {
-  color: red;
+  color: #e50914;
 }
 
 img {
@@ -64,7 +64,7 @@ img {
 }
 
 .selected {
-  color: red;
+  color: #e50914;
 }
 
 .films_filter {
