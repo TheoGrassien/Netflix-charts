@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Netflix Top 10 charts</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
-  <link rel="stylesheet" href="../style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-  <div class="bloc-contenu">
-    <div class="bloc-left">
-     <div class="bloc-information">
-     <h1>Top 10 Netflix <br> France</h1>
-     <p>Source : https://top10.netflix.com/</p>
-   </div>
-   <img src="img/netflix_logo.svg">
+  <section class="left">
+    <div class="infos">
+      <h1>
+        Top 10 Netflix <br />
+        France
+      </h1>
+      <p>
+        Source :
+        <a href="https://top10.netflix.com/">https://top10.netflix.com/</a>
+      </p>
     </div>
-    <div class="bloc-right">
-   
-     <div class="filtre">
-       <div class="filtre_serie">
-       <p>Séries</p>
-     </div>
-     <div class="filtre_tv">
-       <p>Films</p>
-     </div>
-       
-     </div>
-   </div>
-   </div>
-  
+    <img src="img/netflix_logo.svg" />
+  </section>
+  <section class="right">
+    <div class="filters">
+      <p class="series_filter selected">Séries</p>
+      <p class="films_filter">Films</p>
+    </div>
+  </section>
 </body>
+
 </html>
