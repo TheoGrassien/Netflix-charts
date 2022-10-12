@@ -57,6 +57,11 @@ img {
   color: white;
   margin-top: 56px;
   font-weight: 700;
+  position: relative;
+}
+
+.filters p {
+  margin-bottom: 12px;
 }
 
 .series_filter {
@@ -69,4 +74,33 @@ img {
 
 .films_filter {
   cursor: pointer;
+}
+
+.graph-container {
+  margin-top: 56px;
+  height: 572px;
+}
+
+.ui-rank {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+h3 {
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.tab-indicator {
+  height: 4px;
+  width: 56px;
+  background-color: #e50914;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }

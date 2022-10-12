@@ -1,18 +1,33 @@
+// const data = d3.json("data/data.json").then(response);
 
+// function response(l) {
+//   let duration = 250;
+//   let n = 10;
+//   console.log(l);
+// }
 
-document.addEventListener("DOMContentLoaded", function() {
+let filter = "TV";
 
-    document.querySelector('.filter_tv').addEventListener("click", (function(e) {
-        document.querySelector('.filter_serie').classList.remove('hidden');
-    
+async function init() {
+  const response = await fetch("data/data.json");
+  const data0 = await response.json();
 
+  // Grouper le tableau par semaine
+  const data = d3.groups(data0, (d) => d.week).reverse();
 
-    }));
+  let weekcounter = 1;
+  for (let week of data) {
+    function charts() {
+      // Appliquer le filtre
+      let weekFiltered = week[1].filter((w) => w.category == "TV");
+      console.log(weekFiltered);
+    }
 
+    charts();
 
-    document.querySelector('.filter_serie').addEventListener("click", (function(e) {
-        document.querySelector('.filter_tv').classList.add('hidden');
-    }));
-
+    // setTimeout(charts, weekcounter * 1000);
+    // weekcounter++;
+  }
 }
-    
+
+init();
