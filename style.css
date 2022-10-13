@@ -7,6 +7,12 @@ body {
   gap: 124px;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .left {
   width: 30%;
   height: 100vh;
@@ -18,6 +24,10 @@ body {
 .infos {
   margin-left: 56px;
   margin-top: 56px;
+}
+
+.infos h1 {
+  margin-bottom: 32px;
 }
 
 h1 {
@@ -62,20 +72,24 @@ img {
   position: relative;
 }
 
-.filters p {
-  margin-bottom: 12px;
-}
-
-.series_filter {
+.filter {
   cursor: pointer;
+  margin-bottom: 12px;
 }
 
 .selected {
   color: #e50914;
 }
 
-.films_filter {
-  cursor: pointer;
+.tab-indicator {
+  height: 4px;
+  background-color: #e50914;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0;
+
+  transition: 0.3s;
+  left: 0px;
 }
 
 .graph-container {
@@ -107,21 +121,12 @@ h3 {
   left: 0;
 }
 
-
 .barchart {
-
-
   width: 100%;
   height: 80vh;
 }
 
-
-
-
-
 .chartBox {
   width: 700px;
   padding: 20px;
-
-
 }
