@@ -7,13 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Netflix Top 10 charts</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="d3.js"></script>
-
+  <script src="script.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
 
 </head>
 
@@ -37,19 +35,26 @@
       <p class="filter film-filter">Films</p>
       <div class="tab-indicator"></div>
     </div>
-
-    <div class="barchart">
-
-
-
-      <canvas id="myChart"></canvas>
-      <button id="btn_play" onclick="click()">play</button>
-
-    </div>
-
-    <!-- <div class="btn-play"></div> -->
-
-
+    <div class="graph-container">
+      <!-- <svg class="ui-rank">
+        <text y="24" x="0" fill="white">1</text>
+        <text>1</text>
+        <text>1</text>
+        <text>1</text>
+        <text>1</text>
+      </svg> -->
+      <svg id="graph" height="100%">
+        <g>
+          <text y="0" x="0" fill="white" alignment-baseline="hanging">1</text>
+          <text>1</text>
+          <text>1</text>
+          <text>1</text>
+          <text>1</text>
+        </g>
+      </svg>
+      <!-- <svg>
+        <rect x1="0" y1="0" y2="8" x2="800" fill="white"></rect>
+      </svg> -->
     </div>
   </section>
 </body>
