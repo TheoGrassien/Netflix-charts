@@ -29,13 +29,11 @@ async function init() {
       }
       return d;
     });
-  console.log(data);
 
   // Il faudrait aussi faire en sorte qui si une saison est renseigné remplacé le show_title par le nom de la série
 
   // Grouper le tableau par semaine
   const keyframes0 = d3.groups(data, (d) => d.week).reverse();
-  console.log(keyframes0);
 
   let mem = [];
   for (s of keyframes0[0][1]) {
@@ -43,6 +41,7 @@ async function init() {
   }
   let keyframeInterpolateNumber = 10;
   let keyframes = [keyframes0.shift()];
+  console.log(keyframes);
 
   function interpolate(b, a, i, n) {
     return (a * i) / n + (b * (n - i)) / n;
@@ -130,7 +129,33 @@ async function init() {
     .rangeRound([margin.top, margin.top + barSize * (n + 1 + 0.1)])
     .padding(0.1);
 
-  formatDate = d3.utcFormat("%Y");
+  // Formatage de la date
+  function formatDate(date) {
+    date = new Date(date);
+    let options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    date = date.toLocaleDateString("fr", options);
+    return date;
+  }
+
+  function addWeeks(numOfWeeks, date = new Date()) {
+    date.setDate(date.getDate() + numOfWeeks * 7);
+
+    return date;
+  }
+
+  function displayDate(date) {
+    let date1 = formatDate(date.substring(0, 10));
+
+    let date2 = addWeeks(1, new Date(date.substring(0, 10)));
+    date2 = formatDate(date2);
+
+    date = "Du " + date1 + " au " + date2;
+    return date;
+  }
 
   // Aficher la date en bas à droite
   function ticker(svg) {
@@ -143,10 +168,10 @@ async function init() {
       .attr("x", width - 6)
       .attr("y", margin.top + barSize * (n - 0.45))
       .attr("dy", "0.32em")
-      .text(keyframes[0][0]);
+      .text(displayDate(keyframes[0][0]));
 
     return ([date], transition) => {
-      transition.end().then(() => now.text(date));
+      transition.end().then(() => now.text(displayDate(date)));
     };
   }
 
