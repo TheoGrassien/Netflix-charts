@@ -333,7 +333,6 @@ async function init() {
   }
 
   chart();
-  svg.interrupt();
 }
 
 init();
