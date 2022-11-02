@@ -146,6 +146,10 @@ h3 {
   stroke-width: 2px;
 }
 
+#graph {
+  margin-right: 56px;
+}
+
 #graph text,
 #graph .tick {
   pointer-events: none;

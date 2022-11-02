@@ -1,5 +1,13 @@
 let filter = "TV (English)";
 
+// SVG Responsive
+const graph = document.querySelector("#graph");
+const left = document.querySelector(".left");
+function onresize() {
+  width = document.body.offsetWidth - (left.offsetWidth + 124);
+}
+window.addEventListener("resize", onresize);
+
 async function init() {
   const response = await fetch("data/data.json");
   let data = await response.json();
@@ -75,7 +83,7 @@ async function init() {
   const n = 10;
 
   // Interpolation
-  const k = 10;
+  // const k = 10;
 
   names = new Set(data.map((d) => d.show_title));
 
@@ -175,7 +183,10 @@ async function init() {
   function labels(svg) {
     let label = svg
       .append("g")
-      .style("font", "bold 12px var(--sans-serif)")
+      .attr("class", "labels")
+      .style("font-family", "'Poppins', sans-serif")
+      .style("font-size", "0.9rem")
+      .style("font-weight", "500")
       .style("font-variant-numeric", "tabular-nums")
       .attr("text-anchor", "end")
       .style("fill", "white")
@@ -196,16 +207,18 @@ async function init() {
                   )})`
               )
               .attr("y", y.bandwidth() / 2)
-              .attr("x", -6)
-              .attr("dy", "-0.25em")
+              .attr("dy", "0.4em")
+              .attr("x", -4)
               .text((d) => d.show_title)
-              .call((text) =>
-                text
-                  .append("tspan")
-                  .attr("fill-opacity", 0.7)
-                  .attr("font-weight", "normal")
-                  .attr("x", -6)
-                  .attr("dy", "1.15em")
+              .call(
+                (text) =>
+                  text
+                    .append("tspan")
+                    .attr("fill-opacity", 0.7)
+                    .attr("font-weight", "500")
+                    .attr("text-anchor", "start")
+                    .attr("x", 8)
+                // .attr("dy", "0.6em")
               ),
           (update) => update,
           (exit) =>
@@ -320,18 +333,10 @@ async function init() {
   }
 
   chart();
+  svg.interrupt();
 }
 
 init();
-
-// SVG Responsive
-const graph = document.querySelector("#graph");
-const left = document.querySelector(".left");
-function onresize() {
-  width = document.body.offsetWidth - (left.offsetWidth + 124);
-  console.log(width);
-}
-window.addEventListener("resize", onresize);
 
 // Bar selection
 function barSelection() {
