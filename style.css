@@ -96,6 +96,7 @@ img {
 .graph-container {
   margin-top: 56px;
   height: 572px;
+  position: relative;
   /* display: flex; */
 }
 
@@ -153,4 +154,39 @@ h3 {
 #graph text,
 #graph .tick {
   pointer-events: none;
+}
+
+@media screen and (max-width: 1024px) {
+  body {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .left {
+    flex-direction: row-reverse;
+    align-items: center;
+    height: revert;
+    margin-top: 56px;
+    margin-left: 56px;
+    width: revert;
+    justify-content: flex-end;
+
+    gap: 56px;
+  }
+
+  .infos {
+    margin: 0;
+  }
+
+  .infos h1 {
+    margin-bottom: 16px;
+  }
+
+  img {
+    margin: 0;
+  }
+
+  .right {
+    margin: 0 56px 56px 56px;
+  }
 }
