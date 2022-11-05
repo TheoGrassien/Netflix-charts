@@ -1,13 +1,5 @@
 let filter = "TV (English)";
 
-// SVG Responsive
-const graph = document.querySelector("#graph");
-const left = document.querySelector(".left");
-function onresize() {
-  width = document.body.offsetWidth - (left.offsetWidth + 124);
-}
-window.addEventListener("resize", onresize);
-
 async function init() {
   const response = await fetch("data/data.json");
   let data = await response.json();
@@ -119,8 +111,22 @@ async function init() {
   margin = { top: 16, right: 24, bottom: 6, left: 0 };
   barSize = 48;
   height = margin.top + barSize * n + margin.bottom;
-  const svg = d3.select("#graph").attr("viewBox", [0, 0, 900, height]);
+  const svg = d3.select("#graph").attr("viewBox", [0, 0, 800, height]);
   const container = d3.select(".graph-container");
+
+  const scale = d3.scaleOrdinal(d3.schemeTableau10);
+
+  // function color() {
+  //   const scale = d3.scaleOrdinal(d3.schemeTableau10);
+  //   // if (data.some((d) => d.category !== undefined)) {
+  //   //   const categoryByName = new Map(
+  //   //     data.map((d) => [d.show_title, d.category])
+  //   //   );
+  //   //   scale.domain(Array.from(categoryByName.values()));
+  //   //   return (d) => scale(categoryByName.get(d.show_title));
+  //   // }
+  //   return (d) => scale(d.show_title);
+  // }
 
   x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
   y = d3
@@ -158,16 +164,33 @@ async function init() {
   }
 
   // Aficher la date en bas à droite
-  function ticker(svg) {
-    const now = svg
-      .append("text")
-      .style("font", `bold ${barSize}px var(--sans-serif)`)
-      .style("font-variant-numeric", "tabular-nums")
-      .attr("fill", "white")
-      .attr("text-anchor", "end")
-      .attr("x", width - 6)
-      .attr("y", margin.top + barSize * (n - 0.45))
-      .attr("dy", "0.32em")
+  // function ticker(svg) {
+  //   const now = svg
+  //     .append("text")
+  //     .style("font", `bold ${barSize}px var(--sans-serif)`)
+  //     .style("font-variant-numeric", "tabular-nums")
+  //     .attr("fill", "white")
+  //     .attr("text-anchor", "end")
+  //     .attr("x", width - 6)
+  //     .attr("y", margin.top + barSize * (n - 0.45))
+  //     .attr("dy", "0.32em")
+  //     .text(displayDate(keyframes[0][0]));
+
+  //   return ([date], transition) => {
+  //     transition.end().then(() => now.text(displayDate(date)));
+  //   };
+  // }
+
+  function ticker(container) {
+    const now = container
+      .append("p")
+      // .style("font", `bold ${barSize}px var(--sans-serif)`)
+      // .style("font-variant-numeric", "tabular-nums")
+      // .attr("fill", "white")
+      // .attr("text-anchor", "end")
+      // .attr("x", width - 6)
+      // .attr("y", margin.top + barSize * (n - 0.45))
+      // .attr("dy", "0.32em")
       .text(displayDate(keyframes[0][0]));
 
     return ([date], transition) => {
@@ -205,102 +228,14 @@ async function init() {
     };
   }
 
-  // function labels(svg) {
-  //   let label = svg
-  //     .append("g")
-  //     .attr("class", "labels")
-  //     .style("font-family", "'Poppins', sans-serif")
-  //     .style("font-size", "0.9rem")
-  //     .style("font-weight", "500")
-  //     .style("font-variant-numeric", "tabular-nums")
-  //     .attr("text-anchor", "end")
-  //     .style("fill", "white")
-  //     .selectAll("text");
-
-  //   return ([date, data], transition) =>
-  //     (label = label
-  //       .data(data.slice(0, n), (d) => d.show_title)
-  //       .join(
-  //         (enter) =>
-  //           enter
-  //             .append("text")
-  //             .attr(
-  //               "transform",
-  //               (d) =>
-  //                 `translate(${x((prev.get(d) || d).weekly_hours_viewed)},${y(
-  //                   (prev.get(d) || d).weekly_rank - 1
-  //                 )})`
-  //             )
-  //             .attr("y", y.bandwidth() / 2)
-  //             .attr("dy", "0.4em")
-  //             .attr("x", -4)
-  //             .text((d) => d.show_title)
-  //             .call(
-  //               (text) =>
-  //                 text
-  //                   .append("tspan")
-  //                   .attr("fill-opacity", 0.7)
-  //                   .attr("font-weight", "500")
-  //                   .attr("text-anchor", "start")
-  //                   .attr("x", 8)
-  //               // .attr("dy", "0.6em")
-  //             ),
-  //         (update) => update,
-  //         (exit) =>
-  //           exit
-  //             .transition(transition)
-  //             .remove()
-  //             .attr(
-  //               "transform",
-  //               (d) =>
-  //                 `translate(${x((next.get(d) || d).weekly_hours_viewed)},${y(
-  //                   (next.get(d) || d).weekly_rank - 1
-  //                 )})`
-  //             )
-  //             .call((g) =>
-  //               g
-  //                 .select("tspan")
-  //                 .tween("text", (d) =>
-  //                   textTween(
-  //                     d.weekly_hours_viewed,
-  //                     (next.get(d) || d).weekly_hours_viewed
-  //                   )
-  //                 )
-  //             )
-  //       )
-  //       .call((bar) =>
-  //         bar
-  //           .transition(transition)
-  //           .attr(
-  //             "transform",
-  //             (d) =>
-  //               `translate(${x(d.weekly_hours_viewed)},${y(d.weekly_rank - 1)})`
-  //           )
-  //           .call((g) =>
-  //             g
-  //               .select("tspan")
-  //               .tween("text", (d) =>
-  //                 textTween(
-  //                   (prev.get(d) || d).weekly_hours_viewed,
-  //                   d.weekly_hours_viewed
-  //                 )
-  //               )
-  //           )
-  //       ));
-  // }
-
   function labels(container) {
     let label = container
       .append("div")
       .style("position", "absolute")
       .style("top", "0")
       .attr("class", "labels")
-      .style("font-family", "'Poppins', sans-serif")
-      .style("font-size", "0.9rem")
-      .style("font-weight", "500")
-      .style("font-variant-numeric", "tabular-nums")
-      .attr("text-anchor", "end")
-      .style("color", "white")
+      .style("width", "100%")
+      .style("height", "100%")
       .selectAll("p");
 
     return ([date, data], transition) =>
@@ -310,31 +245,29 @@ async function init() {
           (enter) =>
             enter
               .append("p")
-              // .attr(
-              //   "transform",
-              //   (d) =>
-              //     `translate(${x((prev.get(d) || d).weekly_hours_viewed)},${y(
-              //       (prev.get(d) || d).weekly_rank - 1
-              //     )})`
-              // )
-              .select("p")
+              .attr("class", "label")
+              // .select("p")
               .style("position", "absolute")
-              // .style("left", (d) => (prev.get(d) || d).weekly_hours_viewed)
               .style(
                 "left",
-                (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
+                (d) =>
+                  (x((prev.get(d) || d).weekly_hours_viewed) / width) * 100 +
+                  "%"
               )
-              .style("top", (d) => (y(d.weekly_rank) / height) * 100 + "%")
+              .style(
+                "top",
+                (d) =>
+                  (y((prev.get(d) || d).weekly_rank - 1) / height) * 100 + "%"
+              )
               .text((d) => d.show_title)
               .call(
                 (text) =>
                   text
                     .append("p")
-                    .attr("fill-opacity", 0.7)
-                    .attr("font-weight", "500")
-                    .attr("text-anchor", "start")
+                    .attr("class", "label-number")
                     .style("position", "absolute")
-                    .attr("left", 8)
+                // .style("transform", "translateY(-50%)")
+                // .style("top", "-2%")
                 // .attr("dy", "0.6em")
               ),
           (update) => update,
@@ -344,9 +277,15 @@ async function init() {
               .remove()
               .style(
                 "left",
-                (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
+                (d) =>
+                  (x((next.get(d) || d).weekly_hours_viewed) / width) * 100 +
+                  "%"
               )
-              .style("top", (d) => (y(d.weekly_rank) / height) * 100 + "%")
+              .style(
+                "top",
+                (d) =>
+                  (y((next.get(d) || d).weekly_rank - 1) / height) * 100 + "%"
+              )
               .call((g) =>
                 g
                   .select("p")
@@ -365,7 +304,7 @@ async function init() {
               "left",
               (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
             )
-            .style("top", (d) => (y(d.weekly_rank - 1) / width) * 100 + "%")
+            .style("top", (d) => (y(d.weekly_rank - 1) / height) * 100 + "%")
             .call((g) =>
               g
                 .select("p")
@@ -394,6 +333,7 @@ async function init() {
             enter
               .append("rect")
               .attr("fill", "#e50914")
+              // .attr("fill", color())
               .attr("height", y.bandwidth())
               .attr("x", x(0))
               .attr("y", (d) => y((prev.get(d) || d).weekly_rank - 1))
@@ -425,7 +365,7 @@ async function init() {
     const updateBars = bars(svg);
     const updateAxis = axis(svg);
     const updateLabels = labels(container);
-    const updateTicker = ticker(svg);
+    const updateTicker = ticker(container);
 
     for (const keyframe of keyframes) {
       const transition = container
