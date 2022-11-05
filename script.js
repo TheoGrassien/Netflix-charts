@@ -317,9 +317,14 @@ async function init() {
               //       (prev.get(d) || d).weekly_rank - 1
               //     )})`
               // )
+              .select("p")
               .style("position", "absolute")
-              .style("left", (d) => (prev.get(d) || d).weekly_hours_viewed)
-              .style("top", (d) => (prev.get(d) || d).weekly_rank - 1)
+              // .style("left", (d) => (prev.get(d) || d).weekly_hours_viewed)
+              .style(
+                "left",
+                (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
+              )
+              .style("top", (d) => (y(d.weekly_rank) / height) * 100 + "%")
               .text((d) => d.show_title)
               .call(
                 (text) =>
@@ -337,8 +342,11 @@ async function init() {
             exit
               .transition(transition)
               .remove()
-              .style("left", (d) => (next.get(d) || d).weekly_hours_viewed)
-              .style("top", (d) => (next.get(d) || d).weekly_rank - 1)
+              .style(
+                "left",
+                (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
+              )
+              .style("top", (d) => (y(d.weekly_rank) / height) * 100 + "%")
               .call((g) =>
                 g
                   .select("p")
@@ -353,11 +361,14 @@ async function init() {
         .call((bar) =>
           bar
             .transition(transition)
-            .style("left", (d) => d.weekly_hours_viewed)
-            .style("top", (d) => d.weekly_rank - 1)
+            .style(
+              "left",
+              (d) => (x(d.weekly_hours_viewed) / width) * 100 + "%"
+            )
+            .style("top", (d) => (y(d.weekly_rank - 1) / width) * 100 + "%")
             .call((g) =>
               g
-                .select("tspan")
+                .select("p")
                 .tween("text", (d) =>
                   textTween(
                     (prev.get(d) || d).weekly_hours_viewed,
@@ -417,7 +428,7 @@ async function init() {
     const updateTicker = ticker(svg);
 
     for (const keyframe of keyframes) {
-      const transition = svg
+      const transition = container
         .transition()
         .duration(duration)
         .ease(d3.easeLinear);
