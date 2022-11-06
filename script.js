@@ -184,6 +184,7 @@ async function init() {
   function ticker(container) {
     const now = container
       .append("p")
+      .attr("class", "ticker")
       // .style("font", `bold ${barSize}px var(--sans-serif)`)
       // .style("font-variant-numeric", "tabular-nums")
       // .attr("fill", "white")
@@ -362,6 +363,7 @@ async function init() {
 
   async function chart() {
     // replay;
+
     const updateBars = bars(svg);
     const updateAxis = axis(svg);
     const updateLabels = labels(container);
@@ -384,6 +386,10 @@ async function init() {
 
       // invalidation.then(() => svg.interrupt());
       await transition.end();
+
+      if (pause) {
+        await pauser();
+      }
     }
   }
 
@@ -391,6 +397,30 @@ async function init() {
 }
 
 init();
+
+// Play Pause
+const playButton = document.querySelector("#play");
+const pauseButton = document.querySelector("#pause");
+let pause = false;
+
+pauseButton.addEventListener("click", function () {
+  pause = true;
+  pauseButton.style.display = "none";
+  playButton.style.display = "block";
+});
+
+function pauser() {
+  return new Promise((resolve) => {
+    let playbuttonclick = function () {
+      playButton.removeEventListener("click", playbuttonclick);
+      playButton.style.display = "none";
+      pauseButton.style.display = "block";
+      pause = false;
+      resolve("resolved");
+    };
+    playButton.addEventListener("click", playbuttonclick);
+  });
+}
 
 // Bar selection
 function barSelection() {

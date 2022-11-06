@@ -96,7 +96,8 @@ img {
 .graph-container {
   width: 90%;
   height: 100%;
-  margin-top: 56px;
+  margin-top: 24px;
+  margin-bottom: 32px;
   height: 572px;
   position: relative;
   /* display: flex; */
@@ -172,6 +173,39 @@ h3 {
 .label-number {
   opacity: 0.7;
   font-weight: 500;
+}
+
+.ticker {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.playPause {
+  position: relative;
+}
+
+#play,
+#pause {
+  background-color: transparent;
+  border: none;
+  height: 32px;
+  width: 32px;
+  position: absolute;
+}
+
+#play img,
+#pause img {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+#play {
+  display: none;
 }
 
 @media screen and (max-width: 1024px) {
