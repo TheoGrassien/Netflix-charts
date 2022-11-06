@@ -249,11 +249,13 @@ h3 {
 }
 
 #dateSelector::-webkit-slider-thumb {
+  -webkit-appearance: none;
   background-color: #e50914;
   height: 16px;
   width: 16px;
   border-radius: 50%;
   border: 2px solid white;
+  margin-top: -6px;
 }
 
 #dateSelector::-moz-range-thumb {
@@ -264,10 +266,6 @@ h3 {
   border: 2px solid white;
 }
 
-#dateSelector::-webkit-progress-value {
-  background: white;
-  height: 4px;
-}
 #dateSelector::-moz-range-progress {
   background: white;
   height: 4px;
