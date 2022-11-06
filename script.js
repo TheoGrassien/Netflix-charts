@@ -5,7 +5,6 @@ async function init(filter) {
   let data = await response.json();
 
   // Traitement du tableau de données
-
   function updateFilter(filter) {
     data = data
       // Appliquer le filtre
@@ -25,11 +24,10 @@ async function init(filter) {
   }
   updateFilter(filter);
 
-  // Il faudrait aussi faire en sorte qui si une saison est renseigné remplacé le show_title par le nom de la série
-
   // Grouper le tableau par semaine
   const keyframes0 = d3.groups(data, (d) => d.week).reverse();
 
+  // Interpolation pour créer des frames en plus afin d'obtenir une animation plus fluide
   let mem = [];
   for (s of keyframes0[0][1]) {
     mem[s.show_title] = s.weekly_hours_viewed;
@@ -67,38 +65,11 @@ async function init(filter) {
     }
   }
 
-  // Création du graphique
-
   // Durée de l'animation
   const duration = 250;
 
   // Nombre de bars
   const n = 10;
-
-  // Interpolation
-  // const k = 10;
-
-  names = new Set(data.map((d) => d.show_title));
-
-  // datevalues = Array.from(
-  //   d3.rollup(
-  //     data,
-  //     ([d]) => d.weekly_hours_viewed,
-  //     (d) => +new Date(d.week), // Bug de date surement parce que moi c'est une string
-  //     (d) => d.show_title
-  //   )
-  // )
-  //   .map(([week, data]) => {
-  //     return [new Date(week), data];
-  //   })
-  //   .sort(([a], [b]) => d3.ascending(a, b));
-
-  // function rank(value) {
-  //   const data = Array.from(names, (name) => ({ name, value: value(name) }));
-  //   data.sort((a, b) => d3.descending(a.value, b.value));
-  //   for (let i = 0; i < data.length; ++i) data[i].rank = Math.min(n, i);
-  //   return data;
-  // }
 
   nameframes = d3.groups(
     keyframes.flatMap(([, data]) => data),
@@ -109,7 +80,7 @@ async function init(filter) {
   );
   next = new Map(nameframes.flatMap(([, data]) => d3.pairs(data)));
 
-  // Drawing
+  // Créer le graphique
   width = 800;
   margin = { top: 16, right: 24, bottom: 6, left: 0 };
   barSize = 48;
@@ -118,18 +89,6 @@ async function init(filter) {
   const container = d3.select(".graph-container");
 
   const scale = d3.scaleOrdinal(d3.schemeTableau10);
-
-  // function color() {
-  //   const scale = d3.scaleOrdinal(d3.schemeTableau10);
-  //   // if (data.some((d) => d.category !== undefined)) {
-  //   //   const categoryByName = new Map(
-  //   //     data.map((d) => [d.show_title, d.category])
-  //   //   );
-  //   //   scale.domain(Array.from(categoryByName.values()));
-  //   //   return (d) => scale(categoryByName.get(d.show_title));
-  //   // }
-  //   return (d) => scale(d.show_title);
-  // }
 
   x = d3.scaleLinear([0, 1], [margin.left, width - margin.right]);
   y = d3
@@ -172,24 +131,7 @@ async function init(filter) {
     return date;
   }
 
-  // Aficher la date en bas à droite
-  // function ticker(svg) {
-  //   const now = svg
-  //     .append("text")
-  //     .style("font", `bold ${barSize}px var(--sans-serif)`)
-  //     .style("font-variant-numeric", "tabular-nums")
-  //     .attr("fill", "white")
-  //     .attr("text-anchor", "end")
-  //     .attr("x", width - 6)
-  //     .attr("y", margin.top + barSize * (n - 0.45))
-  //     .attr("dy", "0.32em")
-  //     .text(displayDate(keyframes[0][0]));
-
-  //   return ([date], transition) => {
-  //     transition.end().then(() => now.text(displayDate(date)));
-  //   };
-  // }
-
+  // Date en bas à droite
   function ticker(container) {
     const now = container
       .append("p")
@@ -208,6 +150,7 @@ async function init(filter) {
     };
   }
 
+  // Axes
   function axis(svg) {
     const g = svg.append("g").attr("transform", `translate(0,${margin.top})`);
 
@@ -238,6 +181,7 @@ async function init(filter) {
     };
   }
 
+  // Labels
   function labels(container) {
     let label = container
       .append("div")
@@ -328,6 +272,7 @@ async function init(filter) {
         ));
   }
 
+  // Bars
   function bars(svg) {
     let bar = svg
       .append("g")
@@ -370,11 +315,12 @@ async function init(filter) {
         ));
   }
 
-  // Date Selection
+  // Sélection de la date
   const dateSelector = document.querySelector("#dateSelector");
   dateSelector.value = 0;
 
   async function chart(start) {
+    // Créer un nouveau tableau qui commence à la date choisie par l'utilisateur
     keyframesSlice = keyframes.slice(dateSelector.value);
 
     const updateBars = bars(svg);
@@ -388,7 +334,7 @@ async function init(filter) {
         .duration(duration)
         .ease(d3.easeLinear);
 
-      // Extract the top bar’s value.
+      // Extraire la valeur de la première barre
       x.domain([0, keyframe[1][0].weekly_hours_viewed]);
 
       updateAxis(keyframe, transition);
@@ -397,9 +343,9 @@ async function init(filter) {
       updateTicker(keyframe, transition);
       barSelection();
 
-      // invalidation.then(() => svg.interrupt());
       await transition.end();
 
+      // Bouton play/pause
       if (pause) {
         await pauser();
       }
@@ -413,6 +359,7 @@ async function init(filter) {
 
   chart(dateSelector.value);
 
+  // Slider de sélection de la date
   const dateBubble = document.querySelector(".dateBubble");
   const rangeContainer = document.querySelector(".range-container");
 
@@ -441,7 +388,7 @@ async function init(filter) {
 
 init(filter);
 
-// Date selection
+// Fonction de suppression du graphique
 const graphContainer = document.querySelector(".graph-container");
 const graph = document.querySelector("#graph");
 
@@ -454,7 +401,7 @@ function cleanGraph() {
   }
 }
 
-// Play Pause
+// Play/Pause
 const playButton = document.querySelector("#play");
 const pauseButton = document.querySelector("#pause");
 let pause = false;
@@ -478,7 +425,7 @@ function pauser() {
   });
 }
 
-// Bar selection
+// Sélection des barres
 function barSelection() {
   const allBars = document.querySelectorAll(".bars rect");
   allBars.forEach((bar) => barHighlight(allBars, bar));
@@ -491,8 +438,7 @@ function barHighlight(allBars, bar) {
   });
 }
 
-// Filter selection animation
-
+// Filtres
 const filmFilter = document.querySelector(".film-filter");
 const serieFilter = document.querySelector(".serie-filter");
 const tabIndicator = document.querySelector(".tab-indicator");
