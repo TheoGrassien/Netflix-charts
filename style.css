@@ -208,6 +208,69 @@ h3 {
   display: none;
 }
 
+.range-container {
+  width: 90%;
+  position: relative;
+  height: 32px;
+  margin-left: 56px;
+}
+
+.dateBubble {
+  color: white;
+  position: absolute;
+  top: -24px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  display: none;
+}
+
+#dateSelector {
+  /* margin-left: 56px; */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+#dateSelector::-webkit-slider-runnable-track {
+  background: #4b4b4b;
+  height: 4px;
+}
+
+#dateSelector::-moz-range-track {
+  background: #4b4b4b;
+  height: 4px;
+}
+
+#dateSelector::-webkit-slider-thumb {
+  background-color: #e50914;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+#dateSelector::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: #e50914;
+  border: 2px solid white;
+}
+
+#dateSelector::-webkit-progress-value {
+  background: white;
+  height: 4px;
+}
+#dateSelector::-moz-range-progress {
+  background: white;
+  height: 4px;
+}
+
 @media screen and (max-width: 1024px) {
   body {
     flex-direction: column;

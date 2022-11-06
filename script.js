@@ -1,11 +1,10 @@
-let filter = "TV (English)";
-
 async function init() {
   const response = await fetch("data/data.json");
   let data = await response.json();
 
-  // Traitement du tableau de données
+  let filter = "TV (English)";
 
+  // Traitement du tableau de données
   data = data
     // Appliquer le filtre
     .filter((d) => d.category === filter)
@@ -159,7 +158,13 @@ async function init() {
     let date2 = addWeeks(1, new Date(date.substring(0, 10)));
     date2 = formatDate(date2);
 
-    date = "Du " + date1 + " au " + date2;
+    date = date1 + " - " + date2;
+    return date;
+  }
+
+  function displayMonth(date) {
+    date = formatDate(date.substring(0, 10));
+    date = date.substring(2, date.length);
     return date;
   }
 
@@ -361,15 +366,19 @@ async function init() {
         ));
   }
 
-  async function chart() {
-    // replay;
+  // Date Selection
+  let dateSelector = document.querySelector("#dateSelector");
+  dateSelector.value = 0;
+
+  async function chart(start) {
+    keyframesSlice = keyframes.slice(dateSelector.value);
 
     const updateBars = bars(svg);
     const updateAxis = axis(svg);
     const updateLabels = labels(container);
     const updateTicker = ticker(container);
 
-    for (const keyframe of keyframes) {
+    for (const keyframe of keyframesSlice) {
       const transition = container
         .transition()
         .duration(duration)
@@ -390,10 +399,50 @@ async function init() {
       if (pause) {
         await pauser();
       }
+
+      // Récupérer l'index de la keyframe en cours
+      index = keyframes.findIndex((k) => k[0] == keyframe[0]);
+      // Ajuster la range pour qu'elle avance en même temps que l'animation
+      dateSelector.value = index;
     }
   }
 
-  chart();
+  chart(dateSelector.value);
+
+  // Date selection
+  let graphContainer = document.querySelector(".graph-container");
+  let graph = document.querySelector("#graph");
+
+  function cleanGraph() {
+    while (graph.lastChild) {
+      graph.removeChild(graph.lastChild);
+    }
+    while (graphContainer.lastChild.id !== "graph") {
+      graphContainer.removeChild(graphContainer.lastChild);
+    }
+  }
+
+  dateSelector.addEventListener("mouseup", function () {
+    cleanGraph();
+    dateBubble.style.display = "none";
+
+    chart(dateSelector.value);
+  });
+
+  let dateBubble = document.querySelector(".dateBubble");
+  let rangeContainer = document.querySelector(".range-container");
+
+  dateBubble.style.left = (dateSelector.value * 100) / 661 + "%";
+  dateBubble.innerText = displayMonth(keyframes[dateSelector.value][0]);
+
+  dateSelector.addEventListener("input", function () {
+    dateBubble.style.left = (dateSelector.value * 100) / 661 + "%";
+    dateBubble.innerText = displayMonth(keyframes[dateSelector.value][0]);
+  });
+
+  dateSelector.addEventListener("mousedown", function () {
+    dateBubble.style.display = "block";
+  });
 }
 
 init();
@@ -435,8 +484,7 @@ function barHighlight(allBars, bar) {
   });
 }
 
-// Filter selection animation
-
+// Filter
 const filmFilter = document.querySelector(".film-filter");
 const serieFilter = document.querySelector(".serie-filter");
 const tabIndicator = document.querySelector(".tab-indicator");
@@ -447,7 +495,7 @@ const serieFilterWidth = serieFilter.offsetWidth;
 tabIndicator.style.width = serieFilterWidth + "px";
 
 serieFilter.addEventListener("click", () => {
-  filter = "TV";
+  filter = "TV (English)";
 
   serieFilter.classList.add("selected");
   filmFilter.classList.remove("selected");
@@ -457,7 +505,7 @@ serieFilter.addEventListener("click", () => {
 });
 
 filmFilter.addEventListener("click", () => {
-  filter = "Films";
+  filter = "Films (English)";
 
   filmFilter.classList.add("selected");
   serieFilter.classList.remove("selected");
