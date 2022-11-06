@@ -15,7 +15,6 @@ body {
 
 .left {
   width: 30%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -57,7 +56,6 @@ img {
 }
 
 .right {
-  height: 100vh;
   width: 100%;
   margin-right: 56px;
 }
@@ -183,6 +181,10 @@ h3 {
   font-size: 1.2rem;
 }
 
+.actions {
+  margin-bottom: 64px;
+}
+
 .playPause {
   position: relative;
 }
@@ -271,6 +273,21 @@ h3 {
   height: 4px;
 }
 
+.range-start,
+.range-end {
+  font-weight: 400;
+  position: absolute;
+  bottom: -24px;
+}
+
+.range-start {
+  left: 0;
+}
+
+.range-end {
+  right: 0;
+}
+
 @media screen and (max-width: 1024px) {
   body {
     flex-direction: column;
@@ -303,5 +320,24 @@ h3 {
 
   .right {
     margin: 0 56px 56px 56px;
+  }
+
+  .graph-container {
+    width: 80%;
+  }
+
+  .range-container {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .ticker {
+    left: 0;
+    bottom: -32px;
+  }
+
+  .graph-container {
+    margin-bottom: 56px;
   }
 }

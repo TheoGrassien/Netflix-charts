@@ -1,25 +1,29 @@
-async function init() {
+let filter = "TV (English)";
+
+async function init(filter) {
   const response = await fetch("data/data.json");
   let data = await response.json();
 
-  let filter = "TV (English)";
-
   // Traitement du tableau de données
-  data = data
-    // Appliquer le filtre
-    .filter((d) => d.category === filter)
 
-    // Supprimer les données inutiles
-    .map((d) => {
-      delete d.cumulative_weeks_in_top_10;
-      return d;
-    })
-    .map((d) => {
-      if (d.season_title != "N/A") {
-        d.show_title = d.season_title;
-      }
-      return d;
-    });
+  function updateFilter(filter) {
+    data = data
+      // Appliquer le filtre
+      .filter((d) => d.category === filter)
+
+      // Supprimer les données inutiles
+      .map((d) => {
+        delete d.cumulative_weeks_in_top_10;
+        return d;
+      })
+      .map((d) => {
+        if (d.season_title != "N/A") {
+          d.show_title = d.season_title;
+        }
+        return d;
+      });
+  }
+  updateFilter(filter);
 
   // Il faudrait aussi faire en sorte qui si une saison est renseigné remplacé le show_title par le nom de la série
 
@@ -367,7 +371,7 @@ async function init() {
   }
 
   // Date Selection
-  let dateSelector = document.querySelector("#dateSelector");
+  const dateSelector = document.querySelector("#dateSelector");
   dateSelector.value = 0;
 
   async function chart(start) {
@@ -409,28 +413,15 @@ async function init() {
 
   chart(dateSelector.value);
 
-  // Date selection
-  let graphContainer = document.querySelector(".graph-container");
-  let graph = document.querySelector("#graph");
-
-  function cleanGraph() {
-    while (graph.lastChild) {
-      graph.removeChild(graph.lastChild);
-    }
-    while (graphContainer.lastChild.id !== "graph") {
-      graphContainer.removeChild(graphContainer.lastChild);
-    }
-  }
+  const dateBubble = document.querySelector(".dateBubble");
+  const rangeContainer = document.querySelector(".range-container");
 
   dateSelector.addEventListener("mouseup", function () {
-    cleanGraph();
     dateBubble.style.display = "none";
 
+    cleanGraph();
     chart(dateSelector.value);
   });
-
-  let dateBubble = document.querySelector(".dateBubble");
-  let rangeContainer = document.querySelector(".range-container");
 
   dateBubble.style.left = (dateSelector.value * 100) / 661 + "%";
   dateBubble.innerText = displayMonth(keyframes[dateSelector.value][0]);
@@ -438,6 +429,9 @@ async function init() {
   dateSelector.addEventListener("input", function () {
     dateBubble.style.left = (dateSelector.value * 100) / 661 + "%";
     dateBubble.innerText = displayMonth(keyframes[dateSelector.value][0]);
+
+    cleanGraph();
+    chart(dateSelector.value);
   });
 
   dateSelector.addEventListener("mousedown", function () {
@@ -445,7 +439,20 @@ async function init() {
   });
 }
 
-init();
+init(filter);
+
+// Date selection
+const graphContainer = document.querySelector(".graph-container");
+const graph = document.querySelector("#graph");
+
+function cleanGraph() {
+  while (graph.lastChild) {
+    graph.removeChild(graph.lastChild);
+  }
+  while (graphContainer.lastChild.id !== "graph") {
+    graphContainer.removeChild(graphContainer.lastChild);
+  }
+}
 
 // Play Pause
 const playButton = document.querySelector("#play");
@@ -484,7 +491,8 @@ function barHighlight(allBars, bar) {
   });
 }
 
-// Filter
+// Filter selection animation
+
 const filmFilter = document.querySelector(".film-filter");
 const serieFilter = document.querySelector(".serie-filter");
 const tabIndicator = document.querySelector(".tab-indicator");
@@ -502,6 +510,9 @@ serieFilter.addEventListener("click", () => {
 
   tabIndicator.style.left = "0px";
   tabIndicator.style.width = serieFilterWidth + "px";
+
+  cleanGraph();
+  init(filter);
 });
 
 filmFilter.addEventListener("click", () => {
@@ -512,4 +523,7 @@ filmFilter.addEventListener("click", () => {
 
   tabIndicator.style.left = serieFilterWidth + 32 + "px";
   tabIndicator.style.width = filmFilterWidth + "px";
+
+  cleanGraph();
+  init(filter);
 });
