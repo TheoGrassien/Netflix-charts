@@ -32,7 +32,7 @@ async function init(filter) {
   for (s of keyframes0[0][1]) {
     mem[s.show_title] = s.weekly_hours_viewed;
   }
-  let keyframeInterpolateNumber = 10;
+  let keyframeInterpolateNumber = 15;
   let keyframes = [keyframes0.shift()];
 
   function interpolate(b, a, i, n) {
